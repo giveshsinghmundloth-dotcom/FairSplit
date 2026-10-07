@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FairSplit | Split the bill to the last cent</title>
+  <meta name="description" content="Split a restaurant bill equally or by what each person ordered. Shares always add up to the exact total." />
+  <meta name="theme-color" content="#0f6b4f" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&family=Playfair+Display:wght@600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to calculator</a>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="./" aria-label="FairSplit home">
+        <span class="brand-mark" aria-hidden="true"><i class="ph ph-receipt"></i></span>
+        <span class="brand-name">FairSplit</span>
+      </a>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Switch to dark theme">
+        <i class="ph ph-moon" aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="intro">
+      <h1>Split the bill, down to the last cent.</h1>
+      <p class="lede">Equal shares or by what everyone ordered. The amounts always add up to the exact total.</p>
+    </section>
+
+    <div class="mode-picker" role="tablist" aria-label="How do you want to split?">
+      <button class="mode-card" role="tab" id="tab-equal" aria-controls="panel-equal" aria-selected="true" data-mode="equal" type="button">
+        <span class="mode-icon" aria-hidden="true"><i class="ph ph-users-three"></i></span>
+        <span class="mode-text">
+          <span class="mode-title">Equal split</span>
+          <span class="mode-desc">Same share for everyone</span>
+        </span>
+      </button>
+      <button class="mode-card" role="tab" id="tab-items" aria-controls="panel-items" aria-selected="false" data-mode="items" type="button" tabindex="-1">
+        <span class="mode-icon" aria-hidden="true"><i class="ph ph-fork-knife"></i></span>
+        <span class="mode-text">
+          <span class="mode-title">Split by items</span>
+          <span class="mode-desc">Pay for what you ordered</span>
+        </span>
+      </button>
+    </div>
+
+    <div class="layout">
+      <div class="work">
+        <!-- EQUAL SPLIT -->
+        <section class="panel" id="panel-equal" role="tabpanel" aria-labelledby="tab-equal">
+          <h2 class="panel-title">The bill</h2>
+
+          <div class="field">
+            <label for="billAmount">Bill amount <span class="req" aria-hidden="true">*</span></label>
+            <div class="input-wrap">
+              <span class="affix" aria-hidden="true">Rs</span>
+              <input id="billAmount" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-describedby="billAmount-help billAmount-error" />
+            </div>
+            <p class="help" id="billAmount-help">Before tip. Up to 2 decimals.</p>
+            <p class="error" id="billAmount-error" role="alert"></p>
+          </div>
+
+          <div class="field">
+            <label for="peopleCount">Number of people <span class="req" aria-hidden="true">*</span></label>
+            <div class="stepper">
+              <button class="step-btn" type="button" data-step="-1" aria-label="One less person"><i class="ph ph-minus" aria-hidden="true"></i></button>
+              <input id="peopleCount" type="text" inputmode="numeric" autocomplete="off" value="2" aria-describedby="peopleCount-error" />
+              <button class="step-btn" type="button" data-step="1" aria-label="One more person"><i class="ph ph-plus" aria-hidden="true"></i></button>
+            </div>
+            <p class="error" id="peopleCount-error" role="alert"></p>
+          </div>
+        </section>
+
+        <!-- SPLIT BY ITEMS -->
+        <section class="panel" id="panel-items" role="tabpanel" aria-labelledby="tab-items" hidden>
+          <h2 class="panel-title">Who's at the table</h2>
+          <form class="add-row" id="personForm" novalidate>
+            <div class="field grow">
+              <label for="personName">Name</label>
+              <input id="personName" type="text" maxlength="30" autocomplete="off" placeholder="e.g. Anushka" aria-describedby="personName-error" />
+              <p class="error" id="personName-error" role="alert"></p>
+            </div>
+            <button class="btn btn-primary add-btn" type="submit"><i class="ph ph-user-plus" aria-hidden="true"></i>Add person</button>
+          </form>
+          <ul class="people-list" id="peopleList" aria-label="People"></ul>
+
+          <h2 class="panel-title spaced">What was ordered</h2>
+          <form class="add-row" id="itemForm" novalidate>
+            <div class="field grow">
+              <label for="itemName">Item</label>
+              <input id="itemName" type="text" maxlength="40" autocomplete="off" placeholder="e.g. Mine frite" aria-describedby="itemName-error" />
+              <p class="error" id="itemName-error" role="alert"></p>
+            </div>
+            <div class="field price">
+              <label for="itemPrice">Price</label>
+              <div class="input-wrap">
+                <span class="affix" aria-hidden="true">Rs</span>
+                <input id="itemPrice" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" aria-describedby="itemPrice-error" />
+              </div>
+              <p class="error" id="itemPrice-error" role="alert"></p>
+            </div>
+            <button class="btn btn-primary add-btn" type="submit"><i class="ph ph-plus" aria-hidden="true"></i>Add item</button>
+          </form>
+          <ul class="item-list" id="itemList" aria-label="Items"></ul>
+        </section>
+
+        <!-- TIP (shared) -->
+        <section class="panel">
+          <h2 class="panel-title">Tip</h2>
+          <div class="field">
+            <label for="tipPercent">Tip percentage</label>
+            <div class="input-wrap">
+              <input id="tipPercent" type="text" inputmode="decimal" autocomplete="off" value="10" aria-describedby="tipPercent-help tipPercent-error" />
+              <span class="affix affix-end" aria-hidden="true">%</span>
+            </div>
+            <div class="chips" id="tipChips" aria-label="Quick tip amounts">
+              <button type="button" class="chip" data-tip="0">0%</button>
+              <button type="button" class="chip" data-tip="5">5%</button>
+              <button type="button" class="chip" data-tip="10">10%</button>
+              <button type="button" class="chip" data-tip="15">15%</button>
+              <button type="button" class="chip" data-tip="20">20%</button>
+            </div>
+            <p class="help" id="tipPercent-help">0 to 100. Tip is added on top of the bill.</p>
+            <p class="error" id="tipPercent-error" role="alert"></p>
+          </div>
+        </section>
+
+        <!-- WHAT IF -->
+        <section class="panel whatif" aria-labelledby="whatifTitle">
+          <h2 class="panel-title" id="whatifTitle">What if we tipped...</h2>
+          <p class="help">Compare tips side by side. Pick one to use it.</p>
+          <div class="whatif-body" id="whatifBody">
+            <p class="empty-note">Enter the bill above to compare tips.</p>
+          </div>
+          <form class="add-row compact" id="whatifForm" novalidate>
+            <div class="field grow">
+              <label for="whatifTip">Compare another tip %</label>
+              <div class="input-wrap">
+                <input id="whatifTip" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 12.5" aria-describedby="whatifTip-error" />
+                <span class="affix affix-end" aria-hidden="true">%</span>
+              </div>
+              <p class="error" id="whatifTip-error" role="alert"></p>
+            </div>
+            <button class="btn btn-ghost add-btn" type="submit"><i class="ph ph-plus" aria-hidden="true"></i>Compare</button>
+          </form>
+        </section>
+      </div>
+
+      <!-- RECEIPT -->
+      <aside class="summary" aria-labelledby="receiptTitle">
+        <div class="receipt" id="receipt">
+          <div class="receipt-head">
+            <p class="receipt-brand" id="receiptTitle">FairSplit</p>
+            <p class="receipt-meta"><span id="receiptMode">Equal split</span><span id="receiptDate"></span></p>
+          </div>
+          <div id="receiptBody" aria-live="polite"></div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-ghost" id="resetBtn" type="button"><i class="ph ph-arrow-counter-clockwise" aria-hidden="true"></i>Reset</button>
+          <button class="btn btn-primary" id="printBtn" type="button"><i class="ph ph-printer" aria-hidden="true"></i>Print bill</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer container">
+    <p>Runs entirely in your browser. Nothing is saved or sent anywhere.</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="split.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
